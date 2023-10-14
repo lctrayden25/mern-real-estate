@@ -44,10 +44,6 @@ const SignUp = () => {
 		[formData, navigate]
 	);
 
-	const test = useCallback(async () => {
-		navigate("/");
-	}, [navigate]);
-
 	return (
 		<div className="p-3 max-w-lg mx-auto">
 			<h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
@@ -79,7 +75,7 @@ const SignUp = () => {
 				>
 					{loading ? "Loading..." : "Sign Up"}
 				</button>
-				<button onClick={test}>click</button>
+				<OAuth />
 			</form>
 			<div className="flex gap-2 mt-5">
 				<p>Have an account?</p>
