@@ -5,8 +5,7 @@ const SignUp = () => {
 	const [formData, setFormData] = useState({});
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
+	const navigate = useNavigate();
 
 	const handleChange = (e) => {
 		setFormData({
@@ -29,14 +28,14 @@ const SignUp = () => {
 				});
 
 				const data = await res?.json();
-				if (!data?.success) {
+				if (data?.success === false) {
 					setLoading(false);
 					setError(data?.message);
 					return;
 				}
 				setLoading(false);
 				setError(null);
-        navigate("/sign-in");
+				navigate("/sign-in");
 			} catch (error) {
 				setLoading(false);
 				setError(error);
@@ -44,6 +43,10 @@ const SignUp = () => {
 		},
 		[formData, navigate]
 	);
+
+	const test = useCallback(async () => {
+		navigate("/");
+	}, [navigate]);
 
 	return (
 		<div className="p-3 max-w-lg mx-auto">
@@ -76,6 +79,7 @@ const SignUp = () => {
 				>
 					{loading ? "Loading..." : "Sign Up"}
 				</button>
+				<button onClick={test}>click</button>
 			</form>
 			<div className="flex gap-2 mt-5">
 				<p>Have an account?</p>
