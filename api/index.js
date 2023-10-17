@@ -6,6 +6,7 @@ dotenv.config();
 
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
+import listingRouter from "./routes/listing.route.js"
 
 mongoose
 	.connect(process.env.MONGODB)
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/listing", listingRouter)
 
 // this middle must put under the router, otherwise error
 app.use((err, req, res, next) => {
