@@ -151,6 +151,24 @@ const Profile = () => {
 		}
 	}, [currentUser?._id]);
 
+	const handleDeleteListing = useCallback(async (listingId) => {
+		try {
+			const res = await fetch(`/api/listing/delete/${listingId}`, {
+				method: "DELETE",
+			});
+			const data = await res?.json();
+			if (data.success === false) {
+				console.log(data?.message);
+				return;
+			}
+			setUserListings((prev) =>
+				prev.filter((listing) => listing?._id !== listingId)
+			);
+		} catch (error) {
+			console.log(error);
+		}
+	}, []);
+
 	useEffect(() => {
 		console.log(userListings);
 		if (file) {
@@ -270,7 +288,10 @@ const Profile = () => {
 								<p>{listing?.name}</p>
 							</Link>
 							<div className="flex flex-col gap-1 items-end">
-								<button className="text-red-700 flex-1 hover:opacity-90">
+								<button
+									className="text-red-700 flex-1 hover:opacity-90"
+									onClick={() => handleDeleteListing(listing?._id)}
+								>
 									DELETE
 								</button>
 								<button className="text-green-700 flex-1 hover:opacity-90">
