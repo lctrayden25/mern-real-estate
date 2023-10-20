@@ -5,7 +5,7 @@ import { errorHandler } from "../utils/error.js";
 
 export const signup = async (req, res, next) => {
 	const { username, email, password } = req?.body;
-	const hashedPassword = bcryptjs.hashSync(password, 10);
+	const hashedPassword = bcryptjs.hashSync(password, process.env.JWT_SALT);
 	const newUser = new User({ username, email, password: hashedPassword });
 
 	try {
@@ -55,7 +55,7 @@ export const google = async (req, res, next) => {
 			const generatedUsername =
 				name.split(" ").join().toLowerCase() +
 				Math.random().toString(36).slice(-4);
-			const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+			const hashedPassword = bcryptjs.hashSync(generatedPassword, process.env.JWT_SALT);
 			const newUser = new User({
 				username: generatedUsername,
 				email: email,
