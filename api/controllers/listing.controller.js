@@ -46,3 +46,17 @@ export const updateListing = async (req, res, next) => {
 		next(error);
 	}
 };
+
+export const getListing = async (req, res, next) => {
+	try {
+		const listing = await Listing.findById(req.params.id);
+		if (req.user.id !== listing.userRef)
+			return next(errorHandler(401, "You can only get your own listing."));
+
+		if (!listing) return next(errorHandler(401, "Listing not found."));
+
+		res.status(200).json(listing);
+	} catch (error) {
+		next(error);
+	}
+};

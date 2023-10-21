@@ -282,7 +282,7 @@ const Profile = () => {
 								/>
 							</Link>
 							<Link
-								to={`/listing/${listing?.id}`}
+								to={`/listing/${listing?._id}`}
 								className="text-slate-700 font-semibold flex-1 hover:underline truncate"
 							>
 								<p>{listing?.name}</p>
@@ -294,9 +294,9 @@ const Profile = () => {
 								>
 									DELETE
 								</button>
-								<button className="text-green-700 flex-1 hover:opacity-90">
+								<Link to={`/update-listing/${listing?._id}`} className="text-green-700 flex-1 hover:opacity-90">
 									EDIT
-								</button>
+								</Link>
 							</div>
 						</div>
 					))}
