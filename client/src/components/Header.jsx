@@ -10,8 +10,8 @@ const Header = () => {
 
 	const handleSubmit = useCallback(
 		(e) => {
-			const urlParams = new URLSearchParams(window.location.search);
 			e.preventDefault();
+			const urlParams = new URLSearchParams(window.location.search);
 			urlParams.set("searchTerm", searchTerm);
 			const searchQuery = urlParams.toString();
 			navigate(`/search?${searchQuery}`);
