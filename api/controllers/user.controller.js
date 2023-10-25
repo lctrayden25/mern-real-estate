@@ -9,7 +9,10 @@ export const updateUser = async (req, res, next) => {
 
 	try {
 		if (req.body.password) {
-			req.body.password = bcryptjs.hashSync(req.body.password, process.env.JWT_SALT);
+			req.body.password = bcryptjs.hashSync(
+				req.body.password,
+				process.env.JWT_SALT
+			);
 		}
 
 		const updatedUser = await User.findByIdAndUpdate(
@@ -55,5 +58,19 @@ export const getUserListings = async (req, res, next) => {
 		}
 	} else {
 		return next(errorHandler(401, "You can only view your own listing"));
+	}
+};
+
+export const getUser = async (req, res, next) => {
+	try {
+		const user = await User.findById(req?.params?.id);
+
+		if (!user) return next(errorHandler(404, "User not found."));
+
+		const { password, __v, ...rest } = user?._doc ?? {};
+
+		return res.status(202).json(rest);
+	} catch (error) {
+		next(error);
 	}
 };

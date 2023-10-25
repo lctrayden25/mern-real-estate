@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
 	updateUserStart,
 	updateUserFailure,
@@ -11,7 +11,6 @@ import {
 	signOutSuccess,
 	signOutStart,
 } from "../redux/user/userSlice";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { app } from "../firebase";
 import {
