@@ -8,6 +8,14 @@ const Header = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 	const navigate = useNavigate();
 
+	const getSearchParams = useCallback(() => {
+		const urlParams = new URLSearchParams(location.search);
+		const searchTermQuery = urlParams.get("searchTerm");
+		if (searchTermQuery) {
+			setSearchTerm(searchTermQuery);
+		}
+	}, [location.search]);
+
 	const handleSubmit = useCallback(
 		(e) => {
 			e.preventDefault();
@@ -18,14 +26,6 @@ const Header = () => {
 		},
 		[navigate, searchTerm]
 	);
-
-	const getSearchParams = useCallback(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		const searchTermQuery = urlParams.get("searchTerm");
-		if (searchTermQuery) {
-			setSearchTerm(searchTermQuery);
-		}
-	}, []);
 
 	useEffect(() => {
 		getSearchParams();
