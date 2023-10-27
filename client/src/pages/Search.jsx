@@ -6,6 +6,7 @@ const Search = () => {
 	const naviagte = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [listings, setListings] = useState([]);
+	const [showMore, setShowMore] = useState(false);
 
 	const [sidebarData, setSidebarData] = useState({
 		searchTerm: "",
@@ -59,6 +60,12 @@ const Search = () => {
 			if (data?.success === false) {
 				console.log(data.message);
 				setLoading(false);
+				return;
+			}
+			if (data?.length >= 9) {
+				setShowMore(true);
+			} else {
+				setShowMore(false);
 			}
 			setListings(data);
 			setLoading(false);
@@ -100,6 +107,25 @@ const Search = () => {
 		]
 	);
 
+	const onShowMoreClick = useCallback(async () => {
+		const numberOfListing = listings?.length;
+		const startIndex = numberOfListing;
+
+		const urlParams = new URLSearchParams(window.location.search);
+		urlParams.set("startIndex", startIndex);
+		const searchQuery = urlParams.toString();
+
+		const res = await fetch(`/api/listing/get?${searchQuery}`, {
+			method: "GET",
+		});
+		const data = await res?.json();
+		if (data?.length < 9) {
+			setShowMore(false);
+		}
+
+		setListings([...listings, ...data]);
+	}, [listings]);
+
 	useEffect(() => {
 		const urlParams = new URLSearchParams(location.search);
 		const searchTermFromUrl = urlParams.get("searchTerm");
@@ -130,9 +156,9 @@ const Search = () => {
 			});
 		}
 
-        if(urlParams){
-            fetchListings(urlParams.toString())
-        }
+		if (urlParams) {
+			fetchListings(urlParams.toString());
+		}
 	}, [location.search]);
 
 	return (
@@ -245,20 +271,30 @@ const Search = () => {
 				<h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5 w-full">
 					Listing results:
 				</h1>
-				<div className="p-7 flex flex-wrap gap-4 w-full justify-between">
-					{!loading && listings?.length === 0 && (
-						<p className="text-xl text-slate-700">No listing found.</p>
+				<div className="flex p-7 flex-col gap-5">
+					<div className=" flex flex-wrap gap-10 w-full">
+						{!loading && listings?.length === 0 && (
+							<p className="text-xl text-slate-700">No listing found.</p>
+						)}
+						{loading && (
+							<p className="text-xl text-slate-700 text-center w-full">
+								Loading...
+							</p>
+						)}
+						{listings &&
+							!loading &&
+							listings?.map((listing) => (
+								<ListingItem key={listing?._id} listing={listing} />
+							))}
+					</div>
+					{showMore && (
+						<button
+							onClick={onShowMoreClick}
+							className="uppercase text-green-700 hover:underline p-3 bg-white text-center rounded-lg shadow-lg max-w-xs"
+						>
+							Show More
+						</button>
 					)}
-					{loading && (
-						<p className="text-xl text-slate-700 text-center w-full">
-							Loading...
-						</p>
-					)}
-					{listings &&
-						!loading &&
-						listings?.map((listing) => (
-							<ListingItem key={listing?._id} listing={listing} />
-						))}
 				</div>
 			</div>
 		</div>
